@@ -1,0 +1,158 @@
+  public function listarForm1EstadoSolicitante($indice,$limit,$estado,$idSolicitante){
+       
+       
+        $conexion = $this->container->get('bd');
+        $sql = "
+        SELECT *
+        FROM form1 
+        WHERE id_persona = :idSolicitante AND estado_form1 =:estado
+        ORDER BY fecha_elaboracion DESC LIMIT :lim OFFSET :ind ;";
+       
+        $consulta = $conexion->prepare($sql);
+        $consulta->bindValue(':idSolicitante',$idSolicitante,PDO::PARAM_STR);
+        $consulta->bindValue(':estado',$estado,PDO::PARAM_STR);
+        $consulta->bindParam(':ind',$ind,PDO::PARAM_INT);
+        $consulta->bindParam(':lim',$lim,PDO::PARAM_INT);
+        
+        $consulta->execute();
+        $datos = [];
+        if($consulta->rowCount()>0){
+            $i = 0;
+            while ($reg = $consulta->fetch(PDO::FETCH_ASSOC))
+            {
+                $i++;
+                foreach ($reg as $clave => $valor){
+                    $datos[$i][$clave]=$valor;
+                }
+            }
+        }
+        
+        $consulta = null;
+        $conexion = null;
+        return $datos;
+                     
+    }
+    
+    public function listarForm1($ind,$lim){
+        $conexion = $this->container->get('bd');
+        $sql = "
+        SELECT *
+        FROM form1 
+        ORDER BY fecha_elaboracion DESC LIMIT :lim OFFSET :ind ;";
+       
+        $consulta = $conexion->prepare($sql);
+       
+        $consulta->bindParam(':ind',$ind,PDO::PARAM_INT);
+        $consulta->bindParam(':lim',$lim,PDO::PARAM_INT);
+        
+        $consulta->execute();
+        $datos = [];
+        if($consulta->rowCount()>0){
+            $i = 0;
+            while ($reg = $consulta->fetch(PDO::FETCH_ASSOC))
+            {
+                $i++;
+                foreach ($reg as $clave => $valor){
+                    $datos[$i][$clave]=$valor;
+                }
+            }
+        }
+        
+        $consulta = null;
+        $conexion = null;
+        return $datos;
+                     
+    }
+
+   
+   
+
+    public function buscarTramosForm1($idForm){
+        $conexion = $this->container->get('bd');
+        $sql = "
+                SELECT * 
+                FROM form1_tramos
+                WHERE id_form1 =:idForm
+                ORDER BY id_tramos_form1";
+        $consulta = $conexion->prepare($sql);
+        $consulta->bindParam(':idForm',$idForm,PDO::PARAM_INT);
+        $consulta->execute();
+        $datos = [];
+        if($consulta->rowCount()>0){
+            $i = 0;
+            while ($reg = $consulta->fetch(PDO::FETCH_ASSOC))
+            {
+                $i++;
+                foreach ($reg as $clave => $valor){
+                    $datos[$i][$clave]=$valor;
+                }
+            }
+        }
+        
+        $consulta = null;
+        $conexion = null;
+        return $datos;
+
+        
+    }
+   
+    public function buscarForm1Nombres($indice,$limite,$nombre){
+        $conexion = $this->container->get('bd');
+        $sql = "
+                SELECT * 
+                FROM form1 
+                WHERE nombre LIKE '%".$nombre."%' OR apellidos LIKE '%".$nombre."%' 
+                ORDER BY nombre DESC LIMIT :lim OFFSET :ind";
+        $consulta = $conexion->prepare($sql);
+        //$consulta->bindParam(':nombre',$nombre,PDO::PARAM_STR);
+        $consulta->bindParam(':ind',$indice,PDO::PARAM_INT);
+        $consulta->bindParam(':lim',$limite,PDO::PARAM_INT);
+        $consulta->execute();
+        $datos = [];
+        if($consulta->rowCount()>0){
+            $i = 0;
+            while ($reg = $consulta->fetch(PDO::FETCH_ASSOC))
+            {
+                $i++;
+                foreach ($reg as $clave => $valor){
+                    $datos[$i][$clave]=$valor;
+                }
+            }
+        }
+        
+        $consulta = null;
+        $conexion = null;
+        return $datos;
+
+        
+    }
+    public function buscarForm1Estados($indice,$limite,$estado){
+        $conexion = $this->container->get('bd');
+        $sql = "
+                SELECT * 
+                FROM form1 
+                WHERE estado_form1 =:estado
+                ORDER BY nombre DESC LIMIT :lim OFFSET :ind";
+        $consulta = $conexion->prepare($sql);
+        $consulta->bindValue(':estado',$estado,PDO::PARAM_STR);
+        $consulta->bindParam(':ind',$indice,PDO::PARAM_INT);
+        $consulta->bindParam(':lim',$limite,PDO::PARAM_INT);
+        $consulta->execute();
+        $datos = [];
+        if($consulta->rowCount()>0){
+            $i = 0;
+            while ($reg = $consulta->fetch(PDO::FETCH_ASSOC))
+            {
+                $i++;
+                foreach ($reg as $clave => $valor){
+                    $datos[$i][$clave]=$valor;
+                }
+            }
+        }
+        
+        $consulta = null;
+        $conexion = null;
+        return $datos;
+
+        
+    }
